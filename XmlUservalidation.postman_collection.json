@@ -1,0 +1,214 @@
+{
+  "info": {
+    "_postman_id": "926cab45-de46-4e75-9e11-1f39dc80df1d",
+    "name": "XmlUservalidation",
+    "description": "StartFragment\n\n#### Curl",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "50294456"
+  },
+  "item": [
+    {
+      "name": "post_XML_Val",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Check status code\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Check Pet Name exists\", function () {\r",
+              "    var jsonData = xml2Json(pm.response.text());\r",
+              "    pm.expect(jsonData.Pet.name).to.be.a('string').and.not.empty;\r",
+              "});\r",
+              "pm.test(\"Check Pet Name\", function () {\r",
+              "    var jsonData = xml2Json(pm.response.text());\r",
+              "    pm.expect(jsonData.Pet.name).to.eql(\"doggie\"); // matches actual response\r",
+              "});\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "accept",
+            "value": "application/xml"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/xml"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<Pet>\r\n\t<id>0</id>\r\n\t<Category>\r\n\t\t<id>0</id>\r\n\t\t<name>string</name>\r\n\t</Category>\r\n\t<name>doggie</name>\r\n\t<photoUrls>\r\n\t\t<photoUrl>string</photoUrl>\r\n\t</photoUrls>\r\n\t<tags>\r\n\t\t<Tag>\r\n\t\t\t<id>0</id>\r\n\t\t\t<name>string</name>\r\n\t\t</Tag>\r\n\t</tags>\r\n\t<status>available</status>\r\n</Pet>",
+          "options": {
+            "raw": {
+              "language": "xml"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://petstore.swagger.io/v2/pet",
+          "protocol": "https",
+          "host": [
+            "petstore",
+            "swagger",
+            "io"
+          ],
+          "path": [
+            "v2",
+            "pet"
+          ]
+        },
+        "description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://petstore.swagger.io/v2/pet' \\\r\n  -H 'accept: application/xml' \\\r\n  -H 'Content-Type: application/xml' \\\r\n  -d '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<Pet>\r\n\t<id>0</id>\r\n\t<Category>\r\n\t\t<id>0</id>\r\n\t\t<name>string</name>\r\n\t</Category>\r\n\t<name>doggie</name>\r\n\t<photoUrls>\r\n\t\t<photoUrl>string</photoUrl>\r\n\t</photoUrls>\r\n\t<tags>\r\n\t\t<Tag>\r\n\t\t\t<id>0</id>\r\n\t\t\t<name>string</name>\r\n\t\t</Tag>\r\n\t</tags>\r\n\t<status>available</status>\r\n</Pet>'"
+      },
+      "response": []
+    },
+    {
+      "name": "Get_XML_Val",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = xml2Json(pm.response.text());\r",
+              "console.log(\"Parsed Response:\", jsonData);\r",
+              "\r",
+              "pm.test(\"Check status code\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "// Determine Pet node\r",
+              "var petNode = jsonData.Pet || (jsonData.Pets && jsonData.Pets.Pet);\r",
+              "\r",
+              "if (!petNode) {\r",
+              "    console.log(\"No Pet node found in response\");\r",
+              "} else {\r",
+              "    if (Array.isArray(petNode)) petNode = petNode[0]; // first pet if array\r",
+              "\r",
+              "   \r",
+              "\r",
+              "    pm.test(\"Check Pet Name exists\", function () {\r",
+              "        pm.expect(petNode.name).to.be.a('string').and.not.empty;\r",
+              "    });\r",
+              "}\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "accept",
+            "value": "application/xml"
+          }
+        ],
+        "url": {
+          "raw": "https://petstore.swagger.io/v2/pet/1",
+          "protocol": "https",
+          "host": [
+            "petstore",
+            "swagger",
+            "io"
+          ],
+          "path": [
+            "v2",
+            "pet",
+            "1"
+          ]
+        },
+        "description": "Generated from cURL: curl -X 'GET' \\\r\n  'https://petstore.swagger.io/v2/pet/1' \\\r\n  -H 'accept: application/xml'\r\n"
+      },
+      "response": []
+    },
+    {
+      "name": "Delete_Pet_XML",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.collectionVariables.unset(\"petid\");"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "accept",
+            "value": "application/xml"
+          },
+          {
+            "key": "api_key",
+            "value": "1"
+          }
+        ],
+        "url": {
+          "raw": "https://petstore.swagger.io/v2/pet/1",
+          "protocol": "https",
+          "host": [
+            "petstore",
+            "swagger",
+            "io"
+          ],
+          "path": [
+            "v2",
+            "pet",
+            "1"
+          ]
+        },
+        "description": "Generated from cURL: curl -X 'DELETE' \\\r\n  'https://petstore.swagger.io/v2/pet/2' \\\r\n  -H 'accept: application/xml' \\\r\n  -H 'api_key: 1'"
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "value": ""
+    }
+  ]
+}
